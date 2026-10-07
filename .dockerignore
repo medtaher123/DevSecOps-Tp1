@@ -1,0 +1,14 @@
+.git
+.gitignore
+__pycache__
+*.pyc
+*.db
+.venv
+venv
+reports
+proposition.txt
+sujet.txt
+rapport.md
+README.md
+*.md
+.odc-data
