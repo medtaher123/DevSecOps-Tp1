@@ -1,4 +1,4 @@
-# Vulnerable Notes — TP DevSecOps 1 (SAST / SCA)
+# Vulnerable Notes - TP DevSecOps 1 (SAST / SCA)
 
 Application Flask **volontairement vulnérable** pour le TP d'analyse statique (Bandit)
 et d'analyse des dépendances (OWASP Dependency-Check).
@@ -20,10 +20,10 @@ docker run --rm -p 5000:5000 --name notes vulnerable-notes
 Dans un autre terminal :
 
 ```bash
-# Injection SQL — retourne tous les utilisateurs
+# Injection SQL - retourne tous les utilisateurs
 curl -s --get "http://localhost:5000/user" --data-urlencode "name=' OR '1'='1"
 
-# XSS réfléchi — le <script> est renvoyé tel quel
+# XSS réfléchi - le <script> est renvoyé tel quel
 curl -s --get "http://localhost:5000/hello" \
   --data-urlencode "name=<script>alert(1)</script>"
 ```
@@ -33,11 +33,11 @@ curl -s --get "http://localhost:5000/hello" \
 ```bash
 mkdir -p reports
 
-# SAST — Bandit
+# SAST - Bandit
 docker run --rm -v "$PWD":/src python:3.11-slim sh -c \
   "pip install -q bandit && bandit -r /src/app.py -f txt"
 
-# SCA — OWASP Dependency-Check (premier lancement long sans clé NVD)
+# SCA - OWASP Dependency-Check (premier lancement long sans clé NVD)
 docker run --rm \
   -v "$PWD":/src \
   -v "$PWD/reports":/report \

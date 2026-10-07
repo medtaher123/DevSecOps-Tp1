@@ -1,4 +1,4 @@
-"""Vulnerable Notes API — intentionally insecure for a DevSecOps lab.
+"""Vulnerable Notes API - intentionally insecure for a DevSecOps lab.
 
 DO NOT deploy this application to production.
 """
@@ -36,12 +36,12 @@ def init_db():
 @app.route("/")
 def index():
     return (
-        "Vulnerable Notes API — endpoints: "
+        "Vulnerable Notes API - endpoints: "
         "/user?name=… , /hello?name=…"
     )
 
 
-# FIX 1 — parameterized query (no string concatenation)
+# FIX 1 - parameterized query (no string concatenation)
 @app.route("/user")
 def get_user():
     name = request.args.get("name", "")
@@ -54,7 +54,7 @@ def get_user():
     return {"users": rows}
 
 
-# FIX 2 — escape untrusted input before returning HTML
+# FIX 2 - escape untrusted input before returning HTML
 @app.route("/hello")
 def hello():
     name = request.args.get("name", "inconnu")
