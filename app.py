@@ -3,10 +3,11 @@
 DO NOT deploy this application to production.
 """
 
+import os
 import sqlite3
 
 from flask import Flask, request
-from markupsafe import Markup
+from markupsafe import escape
 
 app = Flask(__name__)
 
@@ -40,24 +41,29 @@ def index():
     )
 
 
-# VULN 1 — SQL injection (Bandit B608): user input is concatenated into SQL.
+# FIX 1 — parameterized query (no string concatenation)
 @app.route("/user")
 def get_user():
     name = request.args.get("name", "")
     conn = sqlite3.connect(DB)
-    query = "SELECT id, name FROM users WHERE name = '" + name + "'"
-    rows = conn.execute(query).fetchall()
+    rows = conn.execute(
+        "SELECT id, name FROM users WHERE name = ?",
+        (name,),
+    ).fetchall()
     conn.close()
     return {"users": rows}
 
 
-# VULN 2 — reflected XSS (Bandit B704): Markup marks untrusted input as safe HTML.
+# FIX 2 — escape untrusted input before returning HTML
 @app.route("/hello")
 def hello():
     name = request.args.get("name", "inconnu")
-    return Markup(f"<h1>Bonjour {name}</h1>")
+    return f"<h1>Bonjour {escape(name)}</h1>"
 
 
 if __name__ == "__main__":
     init_db()
-    app.run(host="0.0.0.0", port=5000, debug=False)
+    # Bind address from env so Docker can set 0.0.0.0 without hardcoding it here
+    # (avoids Bandit B104 in application code).
+    host = os.environ.get("APP_HOST", "127.0.0.1")
+    app.run(host=host, port=5000, debug=False)

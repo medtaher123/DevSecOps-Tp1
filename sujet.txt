@@ -1,0 +1,47 @@
+Sujet de TP 1 : Analyse Statique SAST et Sécurité des Dépendances SCA
+Durée : 3 heures
+
+Difficulté : 🟢 Facile
+
+Objectifs d'apprentissage :
+Comprendre l'approche "shift-left" en matière de sécurité.
+
+Appliquer des outils d'analyse statique du code (SAST) pour identifier les vulnérabilités.
+
+Utiliser des outils d'analyse de composition logicielle (SCA) pour détecter les failles dans les dépendances.
+
+Apprendre à interpréter les rapports de scan et à corriger les vulnérabilités les plus courantes.
+
+Matériel nécessaire :
+Un ordinateur avec Git et Docker installés.
+
+Un éditeur de code (VS Code, IntelliJ, etc.).
+
+Votre propre dépôt Git contenant un projet de code dans un langage de programmation courant (Python, Java, Node.js, etc.).
+
+Déroulement des activités :
+Mise en place de l'environnement (30 min) :
+
+Choisissez ou clonez votre dépôt de code : git clone [URL_de_votre_dépôt].
+
+Créez une image Docker de votre application. Si vous n'avez pas de Dockerfile, c'est l'occasion d'en créer un pour votre projet.
+
+Analyse Statique (SAST) (1h) :
+
+Installez SonarQube ou Bandit (pour Python) localement via Docker.
+
+Configurez et lancez un scan SAST sur votre projet.
+
+Votre mission : Identifiez au moins deux vulnérabilités de sécurité signalées par le scanner (par exemple, injection SQL, XSS, etc.), puis corrigez-les dans votre code.
+
+Analyse des Dépendances (SCA) (1h) :
+
+Utilisez OWASP Dependency-Check ou Snyk pour scanner les dépendances de votre projet.
+
+Votre mission : Identifiez au moins une dépendance vulnérable et mettez à jour la version pour la corriger. Expliquez pourquoi cette mise à jour est nécessaire.
+
+Démonstration et Évaluation (30 min) :
+
+Préparez une brève démonstration où vous montrez les vulnérabilités initiales et les correctifs que vous avez apportés.
+
+Montrez que les scanners ne signalent plus les problèmes que vous avez corrigés.
