@@ -10,22 +10,57 @@ et d'analyse des dépendances (OWASP Dependency-Check).
 - Git
 - Docker
 
-## Démarrer l'application
+## Démonstration avant / après (Docker Compose)
+
+Deux projets côte à côte :
+
+| Service | Dossier | Port hôte | Contenu |
+|---------|---------|-----------|---------|
+| `before` | [`before/`](before/) | **5000** | SQLi + XSS + PyYAML 5.3.1 |
+| `after`  | [`after/`](after/)   | **5001** | correctifs SAST + PyYAML 6.0.2 |
+
+```bash
+docker compose up --build -d
+```
+
+Comparer les mêmes payloads :
+
+```bash
+# --- Injection SQL ---
+# BEFORE (vulnérable) : renvoie admin + alice
+curl -s --get "http://localhost:5000/user" --data-urlencode "name=' OR '1'='1"
+echo
+# AFTER (corrigé) : pas d'injection
+curl -s --get "http://localhost:5001/user" --data-urlencode "name=' OR '1'='1"
+echo
+
+# --- XSS ---
+# BEFORE : <script> brut
+curl -s --get "http://localhost:5000/hello" \
+  --data-urlencode "name=<script>alert(1)</script>"
+echo
+# AFTER : échappé (&lt;script&gt;)
+curl -s --get "http://localhost:5001/hello" \
+  --data-urlencode "name=<script>alert(1)</script>"
+echo
+```
+
+Dans le navigateur :
+
+- BEFORE XSS : http://localhost:5000/hello?name=%3Cscript%3Ealert(1)%3C/script%3E
+- AFTER XSS : http://localhost:5001/hello?name=%3Cscript%3Ealert(1)%3C/script%3E
+
+Arrêt :
+
+```bash
+docker compose down
+```
+
+## Démarrer une seule image (racine)
 
 ```bash
 docker build -t vulnerable-notes .
 docker run --rm -p 5000:5000 --name notes vulnerable-notes
-```
-
-Dans un autre terminal :
-
-```bash
-# Injection SQL - retourne tous les utilisateurs
-curl -s --get "http://localhost:5000/user" --data-urlencode "name=' OR '1'='1"
-
-# XSS réfléchi - le <script> est renvoyé tel quel
-curl -s --get "http://localhost:5000/hello" \
-  --data-urlencode "name=<script>alert(1)</script>"
 ```
 
 ## Scanners (voir `rapport.md` pour le détail)

@@ -1,0 +1,14 @@
+services:
+  before:
+    build: ./before
+    container_name: notes-before
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+
+  after:
+    build: ./after
+    container_name: notes-after
+    ports:
+      - "5001:5000"
+    restart: unless-stopped
